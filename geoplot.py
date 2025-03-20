@@ -31,14 +31,14 @@ for i in range(0, num_episodes):
 ```
 """
 
-import re
+import re       # regular expression module for string manipulation
 import json
 
 import pandas as pd
 import numpy as np
 
-from string import Template
-from agent_torch.core.helpers import get_by_path
+from string import Template     # Template from string module helps in string substitution
+from agent_torch.core.helpers import get_by_path        # helper function to access nexted data
 
 geoplot_template = """
 <!doctype html>
@@ -71,7 +71,9 @@ geoplot_template = """
 			// Create the viewer
 			const viewer = new Cesium.Viewer('cesiumContainer')
 
+            // Function to interpolate colours between two given colours
 			function interpolateColor(color1, color2, factor) {
+			    // factor determines the proportion of color2 to blend into color1
 				const result = new Cesium.Color()
 				result.red = color1.red + factor * (color2.red - color1.red)
 				result.green =
@@ -82,6 +84,7 @@ geoplot_template = """
 				return result
 			}
 
+            // Function to get color based on value and min/max range
 			function getColor(value, min, max) {
 				const factor = (value - min) / (max - min)
 				return interpolateColor(
@@ -91,11 +94,13 @@ geoplot_template = """
 				)
 			}
 
+            // Function to get pixel size based on value and min/max range
 			function getPixelSize(value, min, max) {
 				const factor = (value - min) / (max - min)
 				return 100 * (1 + factor)
 			}
 
+            // Function to process time-series GeoJSON data
 			function processTimeSeriesData(geoJsonData) {
 				const timeSeriesMap = new Map()
 				let minValue = Infinity
@@ -121,6 +126,7 @@ geoplot_template = """
 				return { timeSeriesMap, minValue, maxValue }
 			}
 
+            // Function to create time-series entities for Cesium
 			function createTimeSeriesEntities(
 				timeSeriesData,
 				startTime,
